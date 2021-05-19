@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-pell-rich-editor/src/editor.js b/node_modules/react-native-pell-rich-editor/src/editor.js
+index d42e29b..306d729 100644
+--- a/node_modules/react-native-pell-rich-editor/src/editor.js
++++ b/node_modules/react-native-pell-rich-editor/src/editor.js
+@@ -373,7 +373,7 @@ function createHTML(options = {}) {
+                     if ( action[msgData.name]){
+                         var flag = msgData.name === 'result';
+                         // insert image or link need current focus
+-                        flag && focusCurrent();
++                        //flag && focusCurrent();
+                         action[msgData.name](msgData.data, msgData.options);
+                         flag && handler();
+                     } else {

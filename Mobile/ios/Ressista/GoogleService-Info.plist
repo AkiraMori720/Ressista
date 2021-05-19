@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1087913190565-oi88sf5a4ibml5qc9kmqse5u3lq0j504.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1087913190565-oi88sf5a4ibml5qc9kmqse5u3lq0j504</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB8wNWOIM_X9BT_21ADrtZ0Y1Snj1iQihI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1087913190565</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.brainyapps.ressista</string>
+	<key>PROJECT_ID</key>
+	<string>ressista-c9fd2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ressista-c9fd2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1087913190565:ios:7cad161fe5baf202ee194c</string>
+	<key>DATABASE_URL</key>
+	<string>https://ressista-c9fd2.firebaseio.com</string>
+</dict>
+</plist>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1087913190565",
+    "firebase_url": "https://ressista-c9fd2.firebaseio.com",
+    "project_id": "ressista-c9fd2",
+    "storage_bucket": "ressista-c9fd2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087913190565:android:73685aed3175ce09ee194c",
+        "android_client_info": {
+          "package_name": "com.brainyapps.ressista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087913190565-ugl9pm9cdcuvb3h1do11g2e6u91eobaj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brainyapps.ressista",
+            "certificate_hash": "6989499311b231d3d58e6b5a040f40674ef4391b"
+          }
+        },
+        {
+          "client_id": "1087913190565-jo8826aq3e8i6eicpsuqlplrdmieflmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXY53fKtkTMozJg6kQUpLYoppoy7OtY4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087913190565-jo8826aq3e8i6eicpsuqlplrdmieflmr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1087913190565-oi88sf5a4ibml5qc9kmqse5u3lq0j504.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.brainyapps.ressista"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
