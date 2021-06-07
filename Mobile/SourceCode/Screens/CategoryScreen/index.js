@@ -73,6 +73,7 @@ class CategoryScreen extends React.Component {
 
     openChatRoom = (userId) => {
         const { navigation, user } = this.props;
+        console.log('chatroom', userId, user.uid);
         if(user.uid !== userId){
             navigation.navigate('UserProfileScreen', { toId:userId });
         }
@@ -102,7 +103,7 @@ class CategoryScreen extends React.Component {
                 likes={(item.bookmarked && item.bookmarked.length)??'0'}
                 comments={(item.comments && item.comments.length)??'0'}
                 commentView={true}
-                onPressUser={(ownerId) => this.openChatRoom(ownerId)}
+                onPressUser={() => this.openChatRoom(item.ownerId)}
                 onPressItem={()=>this.props.navigation.navigate('LongDistance', {forum: item})}
                 onPressBookmark={(value) => this.onPressBookmark(item.id, value)}
             />

@@ -31,34 +31,46 @@ class SplashScreen extends React.Component {
     componentDidMount() {
         const { appStart, loginSuccess } = this.props;
         setTimeout(async () => {
-            const email = await AsyncStorage.getItem('email');
-            const password = await AsyncStorage.getItem('password');
-            if(email && password){
-                auth()
-                    .onAuthStateChanged(async (user) => {
-                        if (!this.initialize) {
-                            this.initialize = true;
+            const provider = await AsyncStorage.getItem('provider');
+            const token = await AsyncStorage.getItem('token');
 
-                            if (user) {
-                                console.log("-----user:", user._user);
-                                let profile = await FirebaseStore.getUserProfile(user.uid);
-                                if (profile) {
-                                    if(profile.isBanned){
-                                        showToast("You are blocked!");
-                                        await auth().signOut();
-                                        appStart({root:ROOT_ONBOARD});
-                                    } else {
-                                        loginSuccess({...user._user, profile});
+            switch (provider){
+                case 'google':
+                case 'facebook':
+                case 'apple':
+                case 'email':
+                {
+                    if(token){
+                        auth()
+                            .onAuthStateChanged(async (user) => {
+                                if (!this.initialize) {
+                                    this.initialize = true;
+
+                                    if (user) {
+                                        console.log("-----user:", user._user);
+                                        let profile = await FirebaseStore.getUserProfile(user.uid);
+                                        if (profile) {
+                                            if (profile.isBanned) {
+                                                showToast("You are blocked!");
+                                                await auth().signOut();
+                                                appStart({root: ROOT_ONBOARD});
+                                            } else {
+                                                loginSuccess({...user._user, profile});
+                                            }
+                                            return;
+                                        }
                                     }
-                                    return;
+                                    appStart({root: ROOT_ONBOARD});
                                 }
-                            }
-                            appStart({root:ROOT_ONBOARD});
-                        }
-                    });
-            } else {
-                appStart({root:ROOT_ONBOARD});
+                            });
+                        return;
+                    }
+                    break;
+                }
+                default:
+                    break;
             }
+            appStart({root:ROOT_ONBOARD});
         }, 1500)
     }
 

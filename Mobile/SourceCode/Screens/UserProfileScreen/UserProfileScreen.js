@@ -36,7 +36,7 @@ class UserProfileScreen extends React.Component {
 
     init = async(toId) => {
         let toUser = await FirebaseStore.getUserProfile(toId);
-        console.log('toUser', toUser);
+        console.log('toUser', toId, toUser);
         this.setState({ toUser: toUser, loading: false });
     }
 
@@ -73,11 +73,13 @@ class UserProfileScreen extends React.Component {
                         </View>
                     </View>
                     <View style={styles.buttonsView}>
-                        <Button title={'Send Message'} bgColor={colors.app_dark_background}
+                        {
+                            toUser?<Button
+                            title={'Send Message'}
+                            bgColor={colors.app_dark_background}
                             onPress={this.openChatRoom}
-                        />
+                        />:<Text style={styles.noUser}>{'This User was deleted'}</Text>}
                     </View>
-
                 </View>
             </View>
         );

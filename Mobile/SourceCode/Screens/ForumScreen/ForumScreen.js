@@ -76,7 +76,7 @@ class ForumScreen extends React.Component {
                 category_data.push({...category, forums: forums});
             }
             list.sort((a, b) => b.createdAt - a.createdAt);
-            let updateForums = list.filter(forum => forum.updatedAt && forum.updatedAt > (user.profile.lastVisit??Date.now()));
+            let updateForums = list.filter(forum => forum.updatedAt && forum.updatedAt > ((user.profile && user.profile.lastVisit)??Date.now()));
             let updateForumCount = updateForums.length;
             setUpdateForums(updateForumCount);
             this.setState({ categories: category_data, forums: list, loading: false });

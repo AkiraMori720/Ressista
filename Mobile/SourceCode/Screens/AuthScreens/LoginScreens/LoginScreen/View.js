@@ -49,9 +49,10 @@ class LoginScreen extends React.Component {
     async componentDidMount() {
         try {
             const value = await AsyncStorage.getItem('storage_remember');
-            if (value !== null) {
-                const email = await AsyncStorage.getItem('email')
-                const password = await AsyncStorage.getItem('password')
+            const provider = await AsyncStorage.getItem('provider');
+            const token = await AsyncStorage.getItem('token');
+            if (value !== null && provider === 'email') {
+                const { email, password } = JSON.parse(token);
                 this.setState({ remember: true, email, password })
             }
         } catch (e) {
@@ -112,6 +113,14 @@ class LoginScreen extends React.Component {
         Alert.alert('Error', 'failed adding user data!');
     }
 
+    cacheAuthToken = async (provider, token) => {
+        try{
+            await AsyncStorage.setItem('provider', provider);
+            await AsyncStorage.setItem('token', token);
+        } catch (e) {
+        }
+    }
+
     onLoginEmailAndPassword() {
         const { email, password } = this.state;
         const { appStart, loginSuccess } = this.props;
@@ -126,12 +135,8 @@ class LoginScreen extends React.Component {
                 .signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then(async (res) => {
                     if (res && res.user && res.user._user) {
-                        try {
-                            await AsyncStorage.setItem('email', this.state.remember ? this.state.email : null)
-                            await AsyncStorage.setItem('password', this.state.remember ? this.state.password : null)
-                        } catch (e) {
-                            console.log(e)
-                        }
+                        await this.cacheAuthToken('email', JSON.stringify({ email: this.state.remember ? this.state.email : null, password: this.state.remember ? this.state.password : null }));
+
                         console.log('User account created & signed in!', res);
                         firestore()
                             .collection(`users`)
@@ -268,8 +273,8 @@ class LoginScreen extends React.Component {
                                         } else {
                                             try {
                                                 await AsyncStorage.removeItem('storage_remember')
-                                                await AsyncStorage.removeItem('email')
-                                                await AsyncStorage.removeItem('password')
+                                                await AsyncStorage.removeItem('provider')
+                                                await AsyncStorage.removeItem('token')
                                             } catch (e) {
                                                 console.log(e)
                                             }

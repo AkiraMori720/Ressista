@@ -42,6 +42,9 @@ const Styles = StyleSheet.create({
         fontSize:wp(3.8),
         color:colors.black,
     },
+    noUser: {
+        fontSize:wp(4),
+    },
     iconMarker:{
         height: 18,
         width: 18,

@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import {now} from 'moment';
 import FirebaseStore from '../../../../Lib/fireStore';
 import { loginSuccess as loginSuccessAction } from '../../../../Actions/login';
+import AsyncStorage from "@react-native-community/async-storage";
 
 GoogleSignin.configure({
     webClientId: '1087913190565-jo8826aq3e8i6eicpsuqlplrdmieflmr.apps.googleusercontent.com',
@@ -50,6 +51,7 @@ class SignupWith extends React.Component {
 
         auth().signInWithCredential(facebookCredential).then(async (res) =>{
             await this.authLogin(res);
+            await this.cacheAuthToken('google', data.accessToken);
         }).catch((err) => {
             Alert.alert('Error', 'Facebook Sign up failed!');
         });
@@ -65,6 +67,7 @@ class SignupWith extends React.Component {
         // Sign-in the user with the credential
         auth().signInWithCredential(googleCredential).then(async (res) => {
             await this.authLogin(res);
+            await this.cacheAuthToken('google', idToken);
         }).catch((err) => {
             Alert.alert('Error', 'Google Sign up failed!');
         });
@@ -89,11 +92,20 @@ class SignupWith extends React.Component {
         // Sign the user in with the credential
         auth().signInWithCredential(appleCredential).then(async (res) => {
             await this.authLogin(res);
+            await this.cacheAuthToken('apple', JSON.stringify({identityToken, nonce}));
         }).catch((err) => {
             console.log('error', err);
             Alert.alert('Error', 'Apple Sign up failed!');
         });
     };
+
+    cacheAuthToken = async (provider, token) => {
+        try{
+            await AsyncStorage.setItem('provider', provider);
+            await AsyncStorage.setItem('token', token);
+        } catch (e) {
+        }
+    }
 
     authLogin = async (userCredential) => {
         const {loginSuccess} = this.props;

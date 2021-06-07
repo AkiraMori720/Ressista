@@ -11,6 +11,8 @@ import ChatActionDropDown from './ChatActionDropDown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {generateId} from '../../Lib/helper';
 import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import {sendNotifications} from "../../Lib/notification";
 
 const ID_MESSAGE_LENGTH = 24;
 
@@ -29,15 +31,17 @@ class Chat extends React.Component {
             actions:[{ key: 'block', value: (room.block && room.block.includes(props.user.uid))??false }],
             showDropdown: false,
             inputText: '',
+            chatter: null,
             room: room
         }
         this.setHeader();
-        this.init(room.id);
     }
     componentDidMount() {
         this.setState({
             messages: [],
         });
+        this.init(this.state.room.id);
+        this.onOnline();
     }
 
     async componentWillUnmount() {
@@ -46,13 +50,14 @@ class Chat extends React.Component {
 
         try{
             await FirebaseStore.userLeftRoom(user.uid, room.id);
+            this.onOffline();
         } catch (e) {
             console.log('leftRoom Error', e);
         }
     }
 
     init = async (rid) => {
-        const { navigation } = this.props;
+        const { navigation, user } = this.props;
         // Room Subscribe
         let room = await firestore().collection('rooms').doc(rid);
         room.onSnapshot((querySnapShot) => {
@@ -62,9 +67,17 @@ class Chat extends React.Component {
                 navigation.pop();
                 return;
             }
-            console.log('room', subRoom);
             this.setState({ room: subRoom });
         });
+
+        // Chatter
+        const roomData = (await room.get()).data();
+        let otherUserId = roomData.users.find(id => id !== user.uid);
+        let chatter = await firestore().collection('users').doc(otherUserId).get();
+        this.setState({chatter: {
+            ...(chatter.data()),
+            uid: otherUserId
+        }});
 
         // Message Subscribe
         let messages = await firestore().collection('messages').where('rid', '==', rid);
@@ -79,6 +92,18 @@ class Chat extends React.Component {
             this.setState({messages: list, loading: false});
         })
     }
+
+    onOnline = () => {
+        const statusRef = database().ref('rooms/' + this.state.room.id + '/status/' + this.props.user.uid);
+        statusRef.set('online');
+        statusRef.onDisconnect().set('offline').then(() => {});
+    }
+
+    onOffline = () => {
+        const statusRef = database().ref('rooms/' + this.state.room.id + '/status/' + this.props.user.uid);
+        statusRef.set('offline');
+    }
+
 
     setHeader = () => {
         const { navigation } = this.props;
@@ -171,7 +196,7 @@ class Chat extends React.Component {
     }
 
     onPressSend = async() => {
-        const { room, inputText } = this.state;
+        const { room, inputText, chatter } = this.state;
         const { user, navigation } = this.props;
         let message = inputText;
         this.setState({inputText: ''});
@@ -190,7 +215,13 @@ class Chat extends React.Component {
             ]
             let result = await FirebaseStore.saveMessages(room.id, messages);
             if(result.success){
-                console.log('messages', messages);
+                console.log('chatter', chatter);
+                const statusRef = database().ref('rooms/' + this.state.room.id + '/status/' + chatter.uid);
+                const status = (await statusRef.once('value')).val();
+                console.log('chatter status', status);
+                if(status === 'offline' && chatter.fcmToken){
+                    sendNotifications([chatter.fcmToken], (user.profile.displayName)?user.profile.displayName:'User', message, { action: 'message', userId: user.uid, toId: chatter.uid })
+                }
             } else {
                 Alert.alert('Error', result.errorMsg);
                 if(result.errorType === ERROR_ROOM_BLOCK){

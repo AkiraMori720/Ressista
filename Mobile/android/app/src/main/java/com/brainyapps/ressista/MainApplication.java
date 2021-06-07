@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.brainyapps.ressista.BuildConfig;
+import com.facebook.FacebookSdk;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -51,6 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    FacebookSdk.sdkInitialize(this);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 

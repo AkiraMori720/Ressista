@@ -34,7 +34,7 @@ export default class RelationshipsComponent extends React.Component {
                                     <View>
                                         <View style={styles.startedByView}>
                                             <Text style={styles.postedText}>Started by: </Text>
-                                            <TouchableOpacity onPress={() => onPressUser()}>
+                                            <TouchableOpacity onPress={onPressUser}>
                                                 <Text style={styles.postedByText}>{postedBy}</Text>
                                             </TouchableOpacity>
                                         </View>

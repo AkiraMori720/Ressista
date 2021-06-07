@@ -12,6 +12,9 @@ import FirebaseStore from '../Lib/fireStore';
 import {setCategories, setUpdateForums} from '../Actions/category';
 import {setCategory, setRelationShipUpdateForums} from '../Actions/relationship';
 import {setUnreadMessages, setRooms} from '../Actions/message';
+import {setFcmToken} from "../Lib/notification";
+import Navigation from "../Lib/Navigation";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const handleLoginSuccess = function* handleLoginSuccess({ data }) {
 	const { uid, profile } = data;
@@ -45,7 +48,27 @@ const handleLoginSuccess = function* handleLoginSuccess({ data }) {
 	yield put(setUnreadMessages(unread));
 	yield put(setRooms(rooms));
 
+	yield setFcmToken(uid);
+
 	yield put(appStart({root : ROOT_INSIDE}));
+
+	let notification = yield AsyncStorage.getItem('notification');
+	if(notification){
+		const notificationData = JSON.parse(notification);
+		const {  action, userId, toId } = notificationData;
+
+		switch (action){
+			case 'message':
+				if(userId && toId){
+					const room = yield FirebaseStore.getRoom(userId, toId);
+					if(room){
+						setTimeout(() => Navigation.navigate("InsideStack", { screen: 'UserChat', params: { room: room }}, 2000));
+					}
+				}
+				break;
+		}
+		yield AsyncStorage.removeItem('notification');
+	}
 };
 
 const handleLogout = function* handleLogout({}) {
