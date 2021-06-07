@@ -75,7 +75,8 @@ class CreateForumTopic extends React.Component {
         try{
             let data = await FirebaseStore.createForum(user, forum);
             showToast('New Forum is created successfully');
-            navigation.replace('LongDistance', { forum: data });
+//            navigation.replace('LongDistance', { forum: data });
+	    navigation.pop();
         } catch (e) {
             Alert.alert('Oops', 'Creating Forum Failed');
         }
