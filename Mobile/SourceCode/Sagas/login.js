@@ -19,7 +19,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 const handleLoginSuccess = function* handleLoginSuccess({ data }) {
 	const { uid, profile } = data;
 
-	if(!profile.firstName || !profile.lastName){
+	if(!profile.displayName){
 		yield put(appStart({root: ROOT_SET_NAME}));
 		return;
 	}
@@ -72,6 +72,9 @@ const handleLoginSuccess = function* handleLoginSuccess({ data }) {
 };
 
 const handleLogout = function* handleLogout({}) {
+	yield AsyncStorage.removeItem('storage_remember')
+	yield AsyncStorage.removeItem('provider')
+	yield AsyncStorage.removeItem('token')
 	yield put(appStart({root : ROOT_OUTSIDE}));
 };
 
