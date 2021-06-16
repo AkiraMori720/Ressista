@@ -6,15 +6,18 @@ export const setFcmToken = async (userid) => {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
     if (enabled) {
-        const fcmToken = await messaging().getToken();
-        if (fcmToken) {
-            console.log("Your Firebase Token is:", fcmToken);
+        try{
+            const fcmToken = await messaging().getToken();
+            if (fcmToken) {
+                console.log("Your Firebase Token is:", fcmToken);
 
-            let userRef = await firestore().collection('users').doc(userid);
-            await userRef.set({
-                fcmToken: fcmToken
-            }, { merge: true});
-            return fcmToken;
+                let userRef = await firestore().collection('users').doc(userid);
+                await userRef.set({
+                    fcmToken: fcmToken
+                }, { merge: true});
+                return fcmToken;
+            }
+        } catch (e){
         }
     }
     console.log("Failed", "No token received");
