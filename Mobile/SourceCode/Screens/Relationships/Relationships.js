@@ -162,8 +162,7 @@ class Relationships extends React.Component {
     }
 
     listRelationships(item) {
-        const { user } = this.props;
-        const { relationship } = this.state;
+        const { user, relationship } = this.props;
         return (
             <RelationshipsComponent
                 title={item.title}
@@ -174,7 +173,7 @@ class Relationships extends React.Component {
                 comments={item.comments?item.comments.length:0}
                 commentView={true}
                 onPressUser={() => this.openChatRoom(item.ownerId)}
-                onPressItem={()=>this.props.navigation.navigate('LongDistance', {forum: item})}
+                onPressItem={()=>this.props.navigation.navigate('LongDistance', {category: relationship, forum: item})}
                 onPressBookmark={(value) => this.onPressBookmark(item.id, value)}
             />
         )

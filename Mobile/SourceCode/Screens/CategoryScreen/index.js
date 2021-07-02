@@ -104,7 +104,7 @@ class CategoryScreen extends React.Component {
                 comments={(item.comments && item.comments.length)??'0'}
                 commentView={true}
                 onPressUser={() => this.openChatRoom(item.ownerId)}
-                onPressItem={()=>this.props.navigation.navigate('LongDistance', {forum: item})}
+                onPressItem={()=>this.props.navigation.navigate('LongDistance', {category, forum: item})}
                 onPressBookmark={(value) => this.onPressBookmark(item.id, value)}
             />
         )

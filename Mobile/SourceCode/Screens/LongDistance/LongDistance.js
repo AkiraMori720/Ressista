@@ -24,10 +24,12 @@ class LongDistance extends React.Component {
     constructor(props) {
         super(props);
         this.richText = createRef();
-        let forum = props.route.params.forum;
+        let category = props.route.params?.category;
+        let forum = props.route.params?.forum;
         this.state = {
             inputView:false,
             paginationView:true,
+            category,
             forum: forum,
             replies: [],
             reply_text: '',
@@ -135,7 +137,7 @@ class LongDistance extends React.Component {
     }
 
     render() {
-        const { replies, reply_text, editorMounted } = this.state;
+        const { replies, reply_text, editorMounted, category } = this.state;
 
         return (
             <View style={styles.mainContainer}>
@@ -148,7 +150,7 @@ class LongDistance extends React.Component {
 
                 <View style={styles.headerContainer}>
                     <AppHeader
-                        title={'Long Distance Relationships'}
+                        title={category.title}
                         leftIconPath={images.headerLeftBack}
                         onLeftIconPress={() => this.props.navigation.goBack()}
                     />
